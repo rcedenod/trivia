@@ -78,3 +78,59 @@ button:hover {
     background-color: #8becf1;
     transition: 0.5s;
 }
+
+#game-screen {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+#progress {
+    font-weight: bold;
+}
+#question-text {
+    font-size: 1.1rem;
+}
+#answers {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.answer-btn {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #ecf0f1;
+    cursor: pointer;
+    text-align: left;
+}
+.answer-btn.correct {
+    background-color: #2ecc71;
+    color: #fff;
+    border-color: #27ae60;
+}
+.answer-btn.incorrect {
+    background-color: #e74c3c;
+    color: #fff;
+    border-color: #c0392b;
+}
+#timer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+#timer-bar-container {
+    flex: 1;
+    background-color: #ddd;
+    height: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+#timer-bar {
+    height: 100%;
+    width: 100%;
+    background-color: #3498db;
+    transition: width 1s linear;
+}
+#timer-bar.warning {
+    background-color: #e74c3c;
+}
