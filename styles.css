@@ -1,0 +1,80 @@
+body {
+    font-family: Tahoma, sans-serif;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    height: 90vh;
+    background-image: url(images/login_background_web.webp);
+}
+
+.container {
+    background-color: #fff;
+    padding: 20px;
+    margin-right: 150px;
+    width: 90%;
+    height: 410px;
+    max-width: 600px;
+    border-bottom-left-radius: 50px;
+    border-top-right-radius: 50px;
+}
+
+h1, h2 {
+    text-align: center;
+}
+
+#gameconfig-header {
+    font-size: 32px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+label {
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+}
+
+input,
+select {
+    padding: 8px;
+    border-top-width: 0px;
+    border-left-width: 0px;
+    border-right-width: 0px;
+    border-bottom-width: 1px;
+    font-size: 16px;
+}
+
+input:hover,
+input:focus,
+select:hover,
+select:focus {
+  background: #ddd;
+  transition: 0.5s;
+}
+
+option {
+  background-color: #eee;
+  padding: 10px;
+  transition: 0.4s;
+}
+
+option:nth-of-type(odd) {
+  background-color: #fff;
+}
+
+button {
+    padding: 10px;
+    background-color: #cafcff;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #8becf1;
+    transition: 0.5s;
+}

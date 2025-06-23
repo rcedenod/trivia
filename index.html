@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quizly</title>
+    <link rel="shortcut icon" href="/images/preguntados.jfif" />
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div id="gameconfig-screen">  
+            <h1 id="gameconfig-header">Let's play!</h1>
+            <form id="gameconfig-form">
+                <label>
+                    Username:
+                    <input type="text" id="player-name" required minlength="2" maxlength="20" />
+                </label>
+                <label>
+                    Number of questions:
+                    <input type="number" id="question-count" value="5" min="5" max="20" />
+                </label>
+                <label>
+                    Select difficulty:
+                    <select id="difficulty">
+                        <option value="">Any</option>
+                        <option value="easy">Easy</option>
+                        <option value="medium">Hard</option>
+                        <option value="hard">Medium</option>
+                    </select>
+                </label>
+                <label>
+                    Select category:
+                    <select id="category">
+                        <option value="">Any</option>
+                    </select>
+                </label>
+                <button type="submit">Start game!</button>
+            </form>
+        </div>
+    <script src="script.js"></script>
+</body>
+</html>
