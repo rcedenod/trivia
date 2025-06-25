@@ -1,5 +1,6 @@
 const gameConfigScreen = document.getElementById('gameconfig-screen');
 const gameScreen = document.getElementById('game-screen');
+const resultScreen = document.getElementById('result-screen');
 
 const configForm = document.getElementById('gameconfig-form');
 const playerNameInput = document.getElementById('player-name');
@@ -14,6 +15,15 @@ const timerBar = document.getElementById('timer-bar');
 const timerText = document.getElementById('timer-text');
 const scoreDisplay = document.getElementById('score-display');
 
+const resultPlayer = document.getElementById('result-player');
+const resultScore = document.getElementById('result-score');
+const resultCorrect = document.getElementById('result-correct');
+const resultPercentage = document.getElementById('result-percentage');
+const resultAverageTime = document.getElementById('result-average-time');
+const restartSameBtn = document.getElementById('restart-same');
+const changeConfigBtn = document.getElementById('change-config');
+const finishBtn = document.getElementById('finish');
+
 let categories = [];
 let config = {};
 let questions = [];
@@ -26,8 +36,13 @@ const QUESTION_TIME = 20;
 let questionStartTime = 0;
 
 function showElement(element) {
-    element.style.display = 'block';
+    if (element === gameConfigScreen) {
+        element.style.display = 'block';
+    } else {
+        element.style.display = 'flex';
+    }
 }
+
 function hideElement(element) {
     element.style.display = 'none';
 }
@@ -72,15 +87,9 @@ configForm.addEventListener('submit', async (e) => {
     startGame();
 });
 
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-}
-
 async function startGame() {
     hideElement(gameConfigScreen);
+    hideElement(resultScreen);
 
     const url = new URL('https://opentdb.com/api.php');
     url.searchParams.set('amount', config.questionCount);
@@ -121,44 +130,49 @@ async function startGame() {
 }
 
 function shuffleAnswers(correct, incorrects) {
-    const arr = [...incorrects.map(ans => ans), correct];
-    shuffleArray(arr);
-    return arr;
+    const array = [...incorrects.map(answer => answer), correct];
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
 }
 
 function showQuestion() {
     clearInterval(timerInterval);
-    const qObj = questions[questionIndex];
-    progressDiv.textContent = `Pregunta ${questionIndex + 1} de ${config.questionCount}`;
-    questionTextDiv.textContent = qObj.question;
+    const questionObject = questions[questionIndex];
+    progressDiv.textContent = `Question ${questionIndex + 1} out of ${config.questionCount}`;
+    questionTextDiv.textContent = questionObject.question;
     answersDiv.innerHTML = '';
-    qObj.answers.forEach(answer => {
+
+    questionObject.answers.forEach(answer => {
         const btn = document.createElement('button');
         btn.classList.add('answer-btn');
         btn.textContent = answer;
         btn.addEventListener('click', () => selectAnswer(answer));
         answersDiv.appendChild(btn);
     });
+
     updateScoreDisplay();
     startTimer();
 }
 
 function startTimer() {
-    let remaining = QUESTION_TIME;
-    timerBar.textContent = `${remaining}s`;
+    let remainingSeconds = QUESTION_TIME;
+    timerBar.textContent = `${remainingSeconds}s`;
     timerBar.style.width = '100%';
     timerBar.classList.remove('warning');
     questionStartTime = Date.now();
 
     timerInterval = setInterval(() => {
-        remaining--;
-        timerBar.textContent = `${remaining}s`;
-        const pct = (remaining / QUESTION_TIME) * 100;
-        timerBar.style.width = `${pct}%`;
-        if (remaining <= 5) {
+        remainingSeconds--;
+        timerBar.textContent = `${remainingSeconds}s`;
+        const widthPercentage = (remainingSeconds / QUESTION_TIME) * 100;
+        timerBar.style.width = `${widthPercentage}%`;
+        if (remainingSeconds <= 5) {
             timerBar.classList.add('warning');
         }
-        if (remaining <= 0) {
+        if (remainingSeconds <= 0) {
             clearInterval(timerInterval);
             times.push(QUESTION_TIME);
             revealAnswer(null);
@@ -175,17 +189,17 @@ function selectAnswer(selected) {
 }
 
 function revealAnswer(selected) {
-    const qObj = questions[questionIndex];
+    const questionObject = questions[questionIndex];
     const buttons = answersDiv.querySelectorAll('button');
     buttons.forEach(btn => btn.disabled = true);
     buttons.forEach(btn => {
-        if (btn.textContent === qObj.correct) {
+        if (btn.textContent === questionObject.correct) {
             btn.classList.add('correct');
         } else if (btn.textContent === selected) {
             btn.classList.add('incorrect');
         }
     });
-    if (selected === qObj.correct) {
+    if (selected === questionObject.correct) {
         score += 10;
         correctCount++;
     }
@@ -194,6 +208,8 @@ function revealAnswer(selected) {
         questionIndex++;
         if (questionIndex < config.questionCount) {
             showQuestion();
+        } else {
+            endGame();
         }
     }, 2000);
 }
@@ -201,5 +217,30 @@ function revealAnswer(selected) {
 function updateScoreDisplay() {
     scoreDisplay.textContent = `Score: ${score} | Correct: ${correctCount} | Incorrect: ${questionIndex - correctCount}`;
 }
+
+function endGame() {
+    hideElement(gameScreen);
+    showElement(resultScreen);
+    resultPlayer.textContent = `Player: ${config.playerName}`;
+    resultScore.textContent = `Total score: ${score}`;
+    resultCorrect.textContent = `Correct answers: ${correctCount} out of ${config.questionCount}`;
+    const percentage = ((correctCount / config.questionCount) * 100).toFixed(2);
+    resultPercentage.textContent = `Success rate: ${percentage}%`;
+    const totalSeconds = times.reduce((a, b) => a + b, 0);
+    const avg = (totalSeconds / config.questionCount).toFixed(2);
+    resultAverageTime.textContent = `Average answer time: ${avg} seconds`;
+}
+
+restartSameBtn.addEventListener('click', () => {
+    startGame();
+});
+changeConfigBtn.addEventListener('click', () => {
+    hideElement(resultScreen);
+    hideElement(gameScreen);
+    showElement(gameConfigScreen);
+});
+finishBtn.addEventListener('click', () => {
+    window.location.reload();
+});
 
 fetchCategories();

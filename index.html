@@ -44,9 +44,28 @@
             <div id="progress"></div>
             <div id="question-text"></div>
             <div id="answers"></div>
-            <div id="timer-bar-container"><div id="timer-bar"></div></div>
-            <div id="score-display"></div>
+
+            <div id="footer">
+                <div id="timer-bar-container"><div id="timer-bar"></div></div>
+                <div id="score-display"></div>
+            </div>
         </div>
+
+        <div id="result-screen" style="display: none">
+            <h2>Results</h2>
+            <p id="result-player"></p>
+            <p id="result-score"></p>
+            <p id="result-correct"></p>
+            <p id="result-percentage"></p>
+            <p id="result-average-time"></p>
+            <div class="button-group">
+                <button id="restart-same">New game (same settings)</button>
+                <button id="change-config">Change settings</button>
+                <button id="finish">Finish</button>
+            </div>
+        </div>
+
+    </div>
         
     <script src="script.js"></script>
 </body>
