@@ -1,6 +1,8 @@
 const gameConfigScreen = document.getElementById('gameconfig-screen');
 const gameScreen = document.getElementById('game-screen');
 const resultScreen = document.getElementById('result-screen');
+const loadingScreen = document.getElementById('loading-screen');
+const loadingMessage = document.getElementById('loading-message');
 
 const configForm = document.getElementById('gameconfig-form');
 const playerNameInput = document.getElementById('player-name');
@@ -25,15 +27,19 @@ const changeConfigBtn = document.getElementById('change-config');
 const finishBtn = document.getElementById('finish');
 
 let categories = [];
-let config = {};
+let times = [];
 let questions = [];
+
 let questionIndex = 0;
 let score = 0;
 let correctCount = 0;
-let times = [];
-let timerInterval = null;
-const QUESTION_TIME = 20;
 let questionStartTime = 0;
+let timerInterval = null;
+
+let config = {};
+
+const questionTime = 20;
+
 
 function showElement(element) {
     if (element === gameConfigScreen) {
@@ -51,7 +57,11 @@ async function fetchCategories() {
     try {
         const res = await fetch('https://opentdb.com/api_category.php');
         const data = await res.json();
+
         categories = data.trivia_categories;
+        hideElement(loadingScreen);
+        showElement(gameConfigScreen);
+
         createCategories();
     } catch (error) {
         console.error('Error getting categories:', error);
@@ -90,11 +100,13 @@ configForm.addEventListener('submit', async (e) => {
 async function startGame() {
     hideElement(gameConfigScreen);
     hideElement(resultScreen);
+    showElement(loadingScreen);
 
     const url = new URL('https://opentdb.com/api.php');
     url.searchParams.set('amount', config.questionCount);
     url.searchParams.set('difficulty', config.difficulty);
     url.searchParams.set('type', 'multiple');
+    url.searchParams.set('encode', 'url3986');
 
     if (config.category) {
         url.searchParams.set('category', config.category);
@@ -119,6 +131,7 @@ async function startGame() {
         score = 0;
         correctCount = 0;
         times = [];
+        hideElement(loadingScreen);
         showElement(gameScreen);
         showQuestion();
         
@@ -158,7 +171,7 @@ function showQuestion() {
 }
 
 function startTimer() {
-    let remainingSeconds = QUESTION_TIME;
+    let remainingSeconds = questionTime;
     timerBar.textContent = `${remainingSeconds}s`;
     timerBar.style.width = '100%';
     timerBar.classList.remove('warning');
@@ -167,14 +180,14 @@ function startTimer() {
     timerInterval = setInterval(() => {
         remainingSeconds--;
         timerBar.textContent = `${remainingSeconds}s`;
-        const widthPercentage = (remainingSeconds / QUESTION_TIME) * 100;
+        const widthPercentage = (remainingSeconds / questionTime) * 100;
         timerBar.style.width = `${widthPercentage}%`;
         if (remainingSeconds <= 5) {
             timerBar.classList.add('warning');
         }
         if (remainingSeconds <= 0) {
             clearInterval(timerInterval);
-            times.push(QUESTION_TIME);
+            times.push(questionTime);
             revealAnswer(null);
         }
     }, 1000);

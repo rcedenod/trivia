@@ -10,7 +10,7 @@
 <body>
     <div class="container">
 
-        <div id="gameconfig-screen">  
+        <div id="gameconfig-screen" style="display: none">  
             <h1 id="gameconfig-header">Let's play!</h1>
             <form id="gameconfig-form">
                 <label>
@@ -38,6 +38,11 @@
                 </label>
                 <button type="submit">Start game!</button>
             </form>
+        </div>
+
+        <div id="loading-screen">
+            <div class="spinner"></div>
+            <p id="loading-message">Cargando...</p>
         </div>
 
         <div id="game-screen" style="display: none">
