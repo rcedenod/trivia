@@ -1,16 +1,17 @@
 body {
     font-family: Tahoma, sans-serif;
     display: flex;
-    justify-content: right;
+    justify-content: center;
     align-items: center;
-    height: 90vh;
+    margin: 0;
+    height: 100vh;
     background-image: url(images/login_background_web.webp);
+    background-size: cover;
 }
 
-.container {
+#container {
     background-color: #fff;
     padding: 20px;
-    margin-right: 150px;
     width: 90%;
     height: 410px;
     max-width: 600px;
@@ -194,13 +195,17 @@ button:hover {
     background-color: #8becf1;
 }
 
-#loading-screen {
+.loading-screen {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 150px;
+    height: 100%;
+    width: 100%;
+    background-color: white;
+    z-index: 1000;
 }
+
 .spinner {
     border: 4px solid #f3f3f3;
     border-top: 4px solid #3498db;
