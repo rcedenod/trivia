@@ -61,7 +61,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
         } else if ( element === gameScreen) {
             element.style.display = 'flex';
-            document.body.style.backgroundImage = 'url(images/juego.avif)';
+            document.body.style.backgroundImage = 'url(images/aydios.avif)';
             document.body.style.backgroundRepeat = 'no-repeat';
         }
         else {
